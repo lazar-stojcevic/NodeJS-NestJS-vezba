@@ -7,6 +7,7 @@ import { resolve } from 'path/posix';
 import { AddAdministratorDTO } from 'src/dtos/administrator/add.administrator.dto';
 import { EditAdministratorDTO } from 'src/dtos/administrator/edit.administrator.dto';
 import { Repository } from 'typeorm'; 
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AdministratorService {
@@ -33,7 +34,6 @@ export class AdministratorService {
         //DTO -> model
         //username -> username
         //password -[magija]-> password_Hash
-        const crypto = require('crypto');
         const passwordHash = crypto.createHash('sha512');
         passwordHash.update(data.password);
         const passwordHastString = passwordHash.digest('hex').toUpperCase();
