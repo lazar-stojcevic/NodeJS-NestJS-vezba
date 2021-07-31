@@ -1,0 +1,11 @@
+export class AddArticleDTO{
+    name: string;
+    categoryId: number;
+    excerpt: string;
+    description: string;
+    price: number;
+    features: {
+        featureId: number;
+        value: string;
+    }[];
+}
