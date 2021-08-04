@@ -21,6 +21,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AdministratorService } from './services/administrator/administrator.service';
 import { ArticleService } from './services/article/article.service';
 import { CategoryService } from './services/category/category.service';
+import { PhotoService } from './services/photo/photo.service';
 
 
 @Module({
@@ -46,10 +47,26 @@ import { CategoryService } from './services/category/category.service';
         User
       ]
     }),
-    TypeOrmModule.forFeature([Administrator, Category, Article, ArticlePrice, ArticleFeature])
+    TypeOrmModule.forFeature([
+      Administrator,
+        ArticleFeature,
+        ArticlePrice,
+        Article,
+        CartArticle,
+        Cart,
+        Category,
+        Feature,
+        Order,
+        Photo,
+        User])
   ],
   controllers: [AppController, AdministratorControler, CategoryControler, ArticleControler, AuthController],
-  providers: [AdministratorService, CategoryService, ArticleService],
+  providers: [
+    AdministratorService,
+    CategoryService,
+    ArticleService,
+    PhotoService
+  ],
   exports:[ //Ovo radimo da bi nam ove stvari bile dostupne u middleware
     AdministratorService
   ]
