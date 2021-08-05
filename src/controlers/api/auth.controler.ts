@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req } from "@nestjs/common";
-import { ApiResponse } from "entities/misc/api.response.class";
+import { ApiResponse } from "src/entities/misc/api.response.class";
 import { Request, response } from "express";
 import { resolve } from "path/posix";
 import { LoginAdministratorDTO } from "src/dtos/administrator/login.addministrator.dto";
@@ -39,7 +39,7 @@ export class AuthController{
         let sada = new Date();
         sada.setDate(sada.getDate() + 14);
         const istekTimeStamp = sada.getTime() / 1000; //Ovo je UnixTimeStapm
-        jwtData.ext = istekTimeStamp;
+        jwtData.exp = istekTimeStamp;
         jwtData.ip = req.ip.toString();
         jwtData.ua = req.headers["user-agent"];
 
