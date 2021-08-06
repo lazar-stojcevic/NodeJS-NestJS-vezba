@@ -16,11 +16,13 @@ import { AdministratorControler } from './controlers/api/administrator.controler
 import { ArticleControler } from './controlers/api/article.controler';
 import { AuthController } from './controlers/api/auth.controler';
 import { CategoryControler } from './controlers/api/category.controler';
+import { FeatureControler } from './controlers/api/feature.controler';
 import { AppController } from './controlers/app.controller';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AdministratorService } from './services/administrator/administrator.service';
 import { ArticleService } from './services/article/article.service';
 import { CategoryService } from './services/category/category.service';
+import { FeatureService } from './services/feature/feature.service';
 import { PhotoService } from './services/photo/photo.service';
 
 
@@ -60,12 +62,13 @@ import { PhotoService } from './services/photo/photo.service';
         Photo,
         User])
   ],
-  controllers: [AppController, AdministratorControler, CategoryControler, ArticleControler, AuthController],
+  controllers: [AppController, AdministratorControler, CategoryControler, ArticleControler, AuthController, FeatureControler],
   providers: [
     AdministratorService,
     CategoryService,
     ArticleService,
-    PhotoService
+    PhotoService,
+    FeatureService,
   ],
   exports:[ //Ovo radimo da bi nam ove stvari bile dostupne u middleware
     AdministratorService
