@@ -153,8 +153,8 @@ export class ArticleControler{
         const originalFilePath = photo.path;
         const fileName = photo.filename;
 
-        const destinationFilePath = resizedSetings.destination +
-        resizedSetings.small.directory +
+        const destinationFilePath = StorageConfig.photo.destination +
+        resizedSetings.directory +
          fileName;
         sharp(originalFilePath).resize({
             fit: 'cover',
