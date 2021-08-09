@@ -24,6 +24,7 @@ import { ArticleService } from './services/article/article.service';
 import { CategoryService } from './services/category/category.service';
 import { FeatureService } from './services/feature/feature.service';
 import { PhotoService } from './services/photo/photo.service';
+import { UserService } from './services/user/user.service';
 
 
 @Module({
@@ -69,6 +70,7 @@ import { PhotoService } from './services/photo/photo.service';
     ArticleService,
     PhotoService,
     FeatureService,
+    UserService
   ],
   exports:[ //Ovo radimo da bi nam ove stvari bile dostupne u middleware
     AdministratorService
