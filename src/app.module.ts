@@ -73,7 +73,8 @@ import { UserService } from './services/user/user.service';
     UserService
   ],
   exports:[ //Ovo radimo da bi nam ove stvari bile dostupne u middleware
-    AdministratorService
+    AdministratorService,
+    UserService
   ]
 })
 export class AppModule implements NestModule {
