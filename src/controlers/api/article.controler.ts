@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { All, Body, Controller, Delete, Param, Patch, Post, Req, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { Crud } from "@nestjsx/crud";
 import { ArticleFeature } from "src/entities/article-feature.entity";
@@ -49,7 +49,22 @@ import { RoleCheckerGuard } from "src/entities/misc/role.checker.guard";
         }
     },
     routes:{
-        exclude: ['updateOneBase', 'replaceOneBase', 'deleteOneBase']
+        only:[
+            'getOneBase', 
+            'getManyBase'
+        ],
+        getOneBase:{
+            decorators: [
+                UseGuards(RoleCheckerGuard),
+                AllowToRoles('administrator', 'user')
+            ]
+        },
+        getManyBase:{
+            decorators: [
+                UseGuards(RoleCheckerGuard),
+                AllowToRoles('administrator', 'user')
+            ]
+        },
     }
 })
 export class ArticleControler{
@@ -58,7 +73,7 @@ export class ArticleControler{
         public photoService: PhotoService
         ){}
 
-    @Post('createFull')    
+    @Post('')    
     @UseGuards(RoleCheckerGuard)
     @AllowToRoles('administrator')    
     createFullArticle(@Body() data: AddArticleDTO){

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, SetMetadata, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post, Put, SetMetadata, UseGuards } from "@nestjs/common";
 import { Administrator } from "src/entities/administrator.entity";
 import { ApiResponse } from "src/entities/misc/api.response.class";
 import { AddAdministratorDTO } from "src/dtos/administrator/add.administrator.dto";
@@ -25,14 +25,14 @@ export class AdministratorControler{
         return this.administratorService.getById(administratorId);
     }
 
-    @Put()
+    @Post()
     @UseGuards(RoleCheckerGuard)
     @AllowToRoles('administrator')
     add(@Body() data: AddAdministratorDTO): Promise<Administrator | ApiResponse>{
         return this.administratorService.add(data);
     }
 
-    @Post(':id')
+    @Patch(':id')
     @UseGuards(RoleCheckerGuard)
     @AllowToRoles('administrator')
     edit(@Param('id') id : number, @Body() data: EditAdministratorDTO): Promise<Administrator| ApiResponse>{
