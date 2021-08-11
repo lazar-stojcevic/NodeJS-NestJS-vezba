@@ -24,7 +24,7 @@ export class UserService extends TypeOrmCrudService<User>{
         newUser.passwordHash = passwordHastString;
         newUser.forename = data.forename;
         newUser.surename = data.surname;
-        newUser.phoneNumber = data.photoNumber;
+        newUser.phoneNumber = data.phoneNumber;
         newUser.postalAddress = data.postalAdress;
 
         try{
