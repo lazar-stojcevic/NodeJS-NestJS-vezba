@@ -15,6 +15,7 @@ import { Order } from 'src/entities/order.entity';
 import { Photo } from 'src/entities/photo.entity';
 import { User } from 'src/entities/user.entity';
 import { AdministratorControler } from './controlers/api/administrator.controler';
+import { AdministratorOrderControler } from './controlers/api/administrator.order.controler';
 import { ArticleControler } from './controlers/api/article.controler';
 import { AuthController } from './controlers/api/auth.controler';
 import { CategoryControler } from './controlers/api/category.controler';
@@ -83,6 +84,7 @@ import { UserService } from './services/user/user.service';
      AuthController,
      FeatureControler,
      UserCartControler,
+     AdministratorOrderControler
      ],
   providers: [
     AdministratorService,
