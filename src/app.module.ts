@@ -1,6 +1,8 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { MiddlewareConsumer, Module, NestModule} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfiguration } from 'config/database.configuration';
+import { MailConfing } from 'config/mail.config';
 import { Administrator } from 'src/entities/administrator.entity';
 import { ArticleFeature } from 'src/entities/article-feature.entity';
 import { ArticlePrice } from 'src/entities/article-price.entity';
@@ -25,6 +27,7 @@ import { ArticleService } from './services/article/article.service';
 import { CartService } from './services/cart/cart.service';
 import { CategoryService } from './services/category/category.service';
 import { FeatureService } from './services/feature/feature.service';
+import { OrderMailer } from './services/order/order.mailer.service';
 import { OrderService } from './services/order/order.service';
 import { PhotoService } from './services/photo/photo.service';
 import { UserService } from './services/user/user.service';
@@ -64,7 +67,13 @@ import { UserService } from './services/user/user.service';
         Feature,
         Order,
         Photo,
-        User])
+        User]),
+        MailerModule.forRoot({
+          transport: 'smtps://' + MailConfing.username + ':' + MailConfing.password + '@' + MailConfing.hostname,
+          defaults: {
+            from: MailConfing.senderEmail,
+          }
+        }),
   ],
   controllers: [
      AppController,
@@ -83,7 +92,8 @@ import { UserService } from './services/user/user.service';
     FeatureService,
     UserService,
     CartService,
-    OrderService
+    OrderService,
+    OrderMailer,
   ],
   exports:[ //Ovo radimo da bi nam ove stvari bile dostupne u middleware
     AdministratorService,
