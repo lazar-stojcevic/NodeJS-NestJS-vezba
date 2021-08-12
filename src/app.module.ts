@@ -84,7 +84,7 @@ import { UserService } from './services/user/user.service';
      AuthController,
      FeatureControler,
      UserCartControler,
-     AdministratorOrderControler
+     AdministratorOrderControler,
      ],
   providers: [
     AdministratorService,
