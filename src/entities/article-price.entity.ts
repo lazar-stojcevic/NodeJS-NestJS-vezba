@@ -42,7 +42,7 @@ export class ArticlePrice {
     name: "created_it",
     default: () => "CURRENT_TIMESTAMP",
   })
-  createdIt: Date;
+  createdAt: Date;
 
   @ManyToOne(() => Article, (article) => article.articlePrices, {
     onDelete: "RESTRICT",

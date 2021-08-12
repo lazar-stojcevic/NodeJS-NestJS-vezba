@@ -6,8 +6,10 @@ import { ArticlePrice } from "src/entities/article-price.entity";
 import { Article } from "src/entities/article.entity";
 import { ApiResponse } from "src/entities/misc/api.response.class";
 import { AddArticleDTO } from "src/dtos/article/add.article.dto";
-import { Repository } from "typeorm";
+import { Any, Repository } from "typeorm";
 import { EditArticleDTO } from "src/dtos/article/edit.article.dto";
+import { ArticleSearchDTO } from "src/dtos/article/article.search.dto";
+import { In } from "typeorm";
 
 @Injectable()
 export class ArticleService extends TypeOrmCrudService<Article>{
@@ -47,7 +49,8 @@ export class ArticleService extends TypeOrmCrudService<Article>{
                 "category",
                 "articleFeatures",
                 "features",
-                "articlePrices"
+                "articlePrices",
+                "photos"
             ]
         });
 
@@ -109,9 +112,91 @@ export class ArticleService extends TypeOrmCrudService<Article>{
                 "category",
                 "articleFeatures",
                 "features",
-                "articlePrices"
+                "articlePrices",
+                "photos"
             ]
         });
 
+    }
+
+    async search(data: ArticleSearchDTO): Promise<Article[]>{
+        const builder = await this.article.createQueryBuilder("article");
+
+        builder.innerJoinAndSelect("article.articlePrices",
+         "ap",
+         "ap.createdAt = (SELECT MAX(ap.created_it) FROM article_price AS ap WHERE ap.article_id = article.article_id)"); //Ovo treba da se izbegava
+        builder.leftJoinAndSelect("article.articleFeatures", "af");
+
+        builder.where('article.categoryId = :catId', {catId: data.categoryId}) //: znaci da je u pitanju parametar
+
+        if(data.keywords && data.keywords.length > 0){
+            builder.andWhere("(article.name LIKE :kw OR article.excerpt LIKE :kw OR article.descrtiption LIKE :kw)",
+                                {kw:'%' + data.keywords + '%'});
+        }
+
+        if(data.priceMin && typeof data.priceMin === 'number'){
+            builder.andWhere('ap.price >= :min', {min: data.priceMin});
+        }
+
+        if(data.priceMax && typeof data.priceMax === 'number'){
+            builder.andWhere('ap.price <= :max', {max: data.priceMax});
+        }
+
+        if(data.features && data.features.length > 0){
+            for(const feature of data.features){
+                builder.andWhere('af.featureId = :fId AND af.value IN (:fVals)', 
+                {
+                    fId: feature.featureId,
+                    fVals: feature.values
+                }
+                );
+            }
+        }
+
+        let orderBy = 'article.name';
+        let orderDirection: 'ASC' | 'DESC' = 'ASC';
+
+        if(data.orderBy){
+            orderBy = data.orderBy;
+
+            if(orderBy === 'price'){
+                orderBy = 'ap.price';
+            }
+            if(orderBy === 'name'){
+                orderBy = 'article.name';
+            }
+        }
+
+        if(data.orderDirection){
+            orderDirection = data.orderDirection;
+        }
+
+        builder.orderBy(orderBy, orderDirection);
+
+        let page = 0;
+        let perPage: 5|10|25|50|75 = 25;
+        if(data.page && typeof data.page === 'number'){
+            page = data.page;
+        }
+
+        if(data.itemsPerPage && typeof data.itemsPerPage === 'number'){
+            perPage = data.itemsPerPage;
+        }
+
+        builder.skip(page * perPage);
+        builder.take(perPage);
+
+        let articleIds = await (await builder.getMany()).map(article => article.articleId);
+        
+        return await this.article.find({
+            where: { articleId: In(articleIds)},
+            relations: [
+                "category",
+                "articleFeatures",
+                "features",
+                "articlePrices",
+                "photos"
+            ]
+        });
     }
 }
